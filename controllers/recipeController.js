@@ -15,7 +15,6 @@ router.get('/allRecipes', async (req, res) => {
 
 // Add recipe
 router.post('/addRecipe', async (req, res) => {
-    const recipe = req.body
     const newRecipe = new Recipe({
         recipeName: req.body.recipeName,
         steps: req.body.steps
@@ -25,6 +24,18 @@ router.post('/addRecipe', async (req, res) => {
             .catch((error) => {
                 console.log(error)
                 res.status(500).json({ error: 'An error occured while adding the recipe'})})
+})
+
+//Update Recipe
+router.patch('/updateRecipe/:id', async (req, res) => {
+    const recipeId = req.params.id
+    const updatedRecipe = new Recipe(req.body)
+    await Recipe.findByIdAndUpdate(recipeId, updatedRecipe)
+        .then(() => res.status(200).json({message: 'Recipe Updated Successfully'}))
+        .catch((error) => {
+            console.log(error)
+            res.status(500).json({ error: 'An error occured while updating the recipe'})})
+
 })
 
 module.exports = router;
